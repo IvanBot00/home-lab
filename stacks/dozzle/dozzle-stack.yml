@@ -1,0 +1,24 @@
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    environment:
+      - DOZZLE_MODE=swarm
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8282:8080
+    networks:
+      - dozzle
+      - traefik-proxy
+    deploy:
+      mode: global
+      labels:
+         - "traefik.enable=true"
+         - "traefik.http.routers.dozzle.rule=Host(`dozzle.regularlab.xyz`)"
+         - "traefik.http.routers.dozzle.entrypoints=web"
+         - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+networks:
+  dozzle:
+    driver: overlay
+  traefik-proxy:
+    external: true

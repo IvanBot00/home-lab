@@ -12,8 +12,6 @@ services:
       PHOTOVIEW_SQLITE_PATH: /appdata/photoview/sqlite
       PHOTOVIEW_LISTEN_IP: "0.0.0.0"
     volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
       - /appdata/photoview/database:/home/photoview/database
       - /appdata/photoview/storage:/home/photoview/media-cache
       - /mnt/source:/photos:ro

@@ -1,0 +1,69 @@
+---
+# Playbook 1: Install dependencies and k3s on a Debian node (Raspberry Pi)
+# Usage: ansible-playbook -i inventory.ini setup-k3s.yml
+- name: Setup k3s dependencies on Debian
+  hosts: agents
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - ca-certificates
+          - iptables
+          - open-iscsi
+          - nfs-common
+        state: present
+
+    - name: Enable and start iptables legacy (required for k3s on Debian)
+      shell: |
+        update-alternatives --set iptables /usr/sbin/iptables-legacy
+        update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+      args:
+        executable: /bin/bash
+
+    - name: Check if cgroup memory is already enabled in cmdline.txt
+      command: grep -q "cgroup_memory=1" /boot/firmware/cmdline.txt
+      register: cgroup_check
+      failed_when: false
+      changed_when: false
+
+    - name: Enable cgroup memory in /boot/firmware/cmdline.txt (required for k3s on Raspberry Pi)
+      replace:
+        path: /boot/firmware/cmdline.txt
+        regexp: '^(.*?)(\s*cgroup_memory=1 cgroup_enable=memory)?$'
+        replace: '\1 cgroup_memory=1 cgroup_enable=memory'
+      when: cgroup_check.rc != 0
+      register: cgroup_updated
+
+    - name: Download k3s install script
+      get_url:
+        url: https://get.k3s.io
+        dest: /tmp/k3s-install.sh
+        mode: "0755"
+
+    - name: Install k3s binary only (no service start)
+      shell: INSTALL_K3S_SKIP_START=true INSTALL_K3S_SKIP_ENABLE=true sh /tmp/k3s-install.sh
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Verify k3s binary installed
+      command: k3s --version
+      register: k3s_version
+      changed_when: false
+
+    - name: Print k3s version
+      debug:
+        msg: "{{ k3s_version.stdout }}"
+
+    - name: Reboot if cgroup settings were updated
+      reboot:
+        msg: "Rebooting to apply cgroup changes"
+        reboot_timeout: 120
+      when: cgroup_updated.changed

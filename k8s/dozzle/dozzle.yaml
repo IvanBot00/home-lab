@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dozzle
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: pod-viewer
+  namespace: dozzle
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-viewer
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log", "nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-viewer
+subjects:
+  - kind: ServiceAccount
+    name: pod-viewer
+    namespace: dozzle
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dozzle
+  namespace: dozzle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dozzle
+  template:
+    metadata:
+      labels:
+        app: dozzle
+    spec:
+      serviceAccountName: pod-viewer
+      containers:
+        - name: dozzle
+          image: amir20/dozzle:latest
+          env:
+            - name: DOZZLE_MODE
+              value: "k8s"
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dozzle
+  namespace: dozzle
+spec:
+  type: NodePort
+  selector:
+    app: dozzle
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30081

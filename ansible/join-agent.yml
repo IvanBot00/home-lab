@@ -1,0 +1,77 @@
+---
+# Playbook 2: Join a node to the k3s cluster as an agent
+# Usage: ansible-playbook -i inventory.ini join-agent.yml
+#
+# Requires:
+#   - k3s already installed on the agent (run setup-k3s.yml first)
+#   - SSH access to the server node to retrieve the token
+- name: Join node as k3s agent
+  hosts: agents
+  become: true
+
+  tasks:
+    - name: Fetch k3s token from server
+      delegate_to: "{{ groups['server'][0] }}"
+      slurp:
+        src: /var/lib/rancher/k3s/server/node-token
+      register: k3s_token_raw
+      become: true
+
+    - name: Decode token
+      set_fact:
+        k3s_token: "{{ k3s_token_raw.content | b64decode | trim }}"
+
+    - name: Get server IP
+      set_fact:
+        k3s_server_ip: "{{ hostvars[groups['server'][0]]['ansible_host'] }}"
+
+    - name: Write k3s token to file
+      copy:
+        content: "{{ k3s_token }}"
+        dest: /etc/k3s-token
+        mode: "0600"
+        owner: root
+        group: root
+
+    - name: Write k3s agent environment config
+      copy:
+        dest: /etc/rancher/k3s/config.yaml
+        mode: "0600"
+        owner: root
+        group: root
+        content: |
+          server: "https://{{ k3s_server_ip }}:6443"
+          token-file: "/etc/k3s-token"
+      notify: Restart k3s agent
+
+    - name: Verify port 6443 is reachable on the server
+      wait_for:
+        host: "{{ k3s_server_ip }}"
+        port: 6443
+        timeout: 10
+      register: port_check
+
+    - name: Enable and start k3s agent service
+      systemd:
+        name: k3s-agent
+        enabled: true
+        state: started
+
+    - name: Wait for node to appear in cluster
+      delegate_to: "{{ groups['server'][0] }}"
+      command: kubectl get node {{ inventory_hostname }}
+      register: node_check
+      retries: 12
+      delay: 10
+      until: node_check.rc == 0
+      changed_when: false
+
+    - name: Print node status
+      debug:
+        msg: "{{ node_check.stdout }}"
+
+  handlers:
+    - name: Restart k3s agent
+      systemd:
+        name: k3s-agent
+        state: restarted

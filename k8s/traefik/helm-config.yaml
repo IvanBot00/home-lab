@@ -9,4 +9,12 @@ spec:
       enabled: true
     api:
       dashboard: true
-      insecure: true
+      insecure: false
+    logs:
+      general:
+        level: ERROR
+      access:
+        enabled: true
+    metrics:
+      prometheus:
+        enabled: true

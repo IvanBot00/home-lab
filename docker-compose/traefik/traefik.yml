@@ -9,8 +9,6 @@ entryPoints:
     address: ":80"
 
 providers:
-  docker:
-    exposedByDefault: false
   file:
     directory: /config
     watch: true

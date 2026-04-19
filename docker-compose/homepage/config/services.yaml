@@ -7,6 +7,9 @@
         description: Docker log viewer
 
 - Admin:
+    - Technitium:
+        href: http://100.102.31.23:5380
+        description: DNS server
     - Traefik:
         href: http://100.110.14.83:8080/dashboard/
         description: Reverse proxy

@@ -1,0 +1,18 @@
+[2026-04-19T20:31:23.166Z] info: kubernetes.yaml was copied to the config folder
+[2026-04-19T20:31:28.352Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.621Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.636Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.644Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.656Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.661Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.667Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.672Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.678Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.683Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.694Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:31:28.697Z] error: Host validation failed for: home.regularlab.xyz. Hint: Set the HOMEPAGE_ALLOWED_HOSTS environment variable to allow requests from this host / port.
+[2026-04-19T20:32:09.583Z] info: docker.yaml was copied to the config folder
+[2026-04-19T20:32:09.585Z] info: bookmarks.yaml was copied to the config folder
+[2026-04-19T20:32:09.585Z] info: proxmox.yaml was copied to the config folder
+[2026-04-19T20:32:09.599Z] info: custom.css was copied to the config folder
+[2026-04-19T20:32:09.600Z] info: custom.js was copied to the config folder

@@ -10,4 +10,4 @@ http:
     dozzle:
       loadBalancer:
         servers:
-          - url: "http://localhost:8888"
+          - url: "http://100.110.14.83:8888"

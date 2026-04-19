@@ -1,0 +1,13 @@
+http:
+  routers:
+    homepage:
+      rule: "Host(`home.regularlab.xyz`)"
+      entryPoints:
+        - web
+      service: homepage
+
+  services:
+    homepage:
+      loadBalancer:
+        servers:
+          - url: "http://100.110.14.83:3000"

@@ -1,0 +1,15 @@
+- Media:
+    - PiGallery:
+        href: http://pigallery.regularlab.xyz
+        description: Photo gallery
+    - Dozzle:
+        href: http://dozzle.regularlab.xyz
+        description: Docker log viewer
+
+- Admin:
+    - Traefik:
+        href: http://100.110.14.83:8080/dashboard/
+        description: Reverse proxy
+        widget:
+          type: traefik
+          url: http://100.110.14.83:8080

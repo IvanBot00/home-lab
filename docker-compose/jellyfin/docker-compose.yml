@@ -1,0 +1,20 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    user: 1000:1000
+    ports:
+      - "8096:8096"
+    volumes:
+      - ${JELLYFIN_CONFIG_DIR}:/config
+      - ${JELLYFIN_CACHE_DIR}:/cache
+      - ${JELLYFIN_MEDIA_DIR}:/media:ro
+    # NVIDIA hardware acceleration — requires nvidia-container-toolkit on the host.
+    # Remove the deploy block if not using GPU transcoding.
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu, video]

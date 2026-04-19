@@ -1,0 +1,13 @@
+http:
+  routers:
+    jellyfin:
+      rule: "Host(`jellyfin.regularlab.xyz`)"
+      entryPoints:
+        - web
+      service: jellyfin
+
+  services:
+    jellyfin:
+      loadBalancer:
+        servers:
+          - url: "http://100.110.14.83:8096"

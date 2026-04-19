@@ -1,0 +1,13 @@
+http:
+  routers:
+    dozzle:
+      rule: "Host(`dozzle.regularlab.xyz`)"
+      entryPoints:
+        - web
+      service: dozzle
+
+  services:
+    dozzle:
+      loadBalancer:
+        servers:
+          - url: "http://localhost:8888"

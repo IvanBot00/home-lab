@@ -1,4 +1,7 @@
 - Media:
+    - Jellyfin:
+        href: http://jellyfin.regularlab.xyz
+        description: Media server
     - PiGallery:
         href: http://pigallery.regularlab.xyz
         description: Photo gallery

@@ -19,6 +19,11 @@ services:
         - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.regularlab.xyz`)"
         - "traefik.http.routers.jellyfin.entrypoints=web"
         - "traefik.http.services.jellyfin.loadbalancer.server.port=8096"
+        - "homepage.name=Jellyfin"
+        - "homepage.href=http://jellyfin.regularlab.xyz"
+        - "homepage.group=Media"
+        - "homepage.description=Media server"
+        - "homepage.icon=jellyfin"
 
 networks:
   traefik-proxy:

@@ -17,6 +17,11 @@ services:
          - "traefik.http.routers.dozzle.rule=Host(`dozzle.regularlab.xyz`)"
          - "traefik.http.routers.dozzle.entrypoints=web"
          - "traefik.http.services.dozzle.loadbalancer.server.port=8080"
+         - "homepage.name=Dozzle"
+         - "homepage.href=http://dozzle.regularlab.xyz"
+         - "homepage.group=Admin"
+         - "homepage.description=Docker log viewer"
+         - "homepage.icon=dozzle"
 networks:
   dozzle:
     driver: overlay

@@ -1,0 +1,5 @@
+AdminPassword: "changeme"
+DatabaseDriver: sqlite
+SiteUrl: "http://photoprism.regularlab.xyz/"
+OriginalsLimit: 5000
+HttpCompression: gzip

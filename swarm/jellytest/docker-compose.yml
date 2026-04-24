@@ -1,0 +1,25 @@
+services:
+  jellytest:
+    image: jellyfin/jellyfin:latest
+    volumes:
+      - /appdata/jellytest/config:/config
+      - /appdata/jellytest/cache:/cache
+      - /mnt/source:/media:ro
+    networks:
+      - traefik-proxy
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.nas == synology-nas
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.jellytest.rule=Host(`jellytest.regularlab.xyz`)"
+        - "traefik.http.routers.jellytest.entrypoints=web"
+        - "traefik.http.services.jellytest.loadbalancer.server.port=8096"
+
+networks:
+  traefik-proxy:
+    external: true

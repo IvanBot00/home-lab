@@ -1,43 +1,44 @@
 services:
-  jellytest:
-    image: jellyfin/jellyfin:latest
-    volumes:
-      - jellytest_config:/config
-      - jellytest_cache:/cache
-      - jellytest_media:/media:ro
+  pigallery:
+    image: bpatrik/pigallery2:latest
+    hostname: pigallery
     networks:
       - traefik-proxy
+    volumes:
+      - pigallery_config:/app/data/config
+      - pigallery_db:/app/data/db
+      - pigallery_media:/app/data/images:ro
     deploy:
       replicas: 1
       placement:
         constraints:
           - node.labels.nas == synology-nas
       restart_policy:
-        condition: on-failure
+        condition: any
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.jellytest.rule=Host(`jellytest.regularlab.xyz`)"
-        - "traefik.http.routers.jellytest.entrypoints=web"
-        - "traefik.http.services.jellytest.loadbalancer.server.port=8096"
+        - "traefik.http.routers.pigallery.rule=Host(`pigallery.regularlab.xyz`)"
+        - "traefik.http.routers.pigallery.entrypoints=web"
+        - "traefik.http.services.pigallery.loadbalancer.server.port=80"
 
 networks:
   traefik-proxy:
     external: true
 
 volumes:
-  jellytest_config:
+  pigallery_config:
     driver: local
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/jellytest/config"
-  jellytest_cache:
+      device: ":/volume2/appdata/pigallery/config"
+  pigallery_db:
     driver: local
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/jellytest/cache"
-  jellytest_media:
+      device: ":/volume2/appdata/pigallery/db"
+  pigallery_media:
     driver: local
     driver_opts:
       type: nfs

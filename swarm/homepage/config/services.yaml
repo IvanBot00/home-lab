@@ -1,0 +1,23 @@
+- Admin:
+    - Portainer:
+        href: http://portainer.regularlab.xyz
+        description: Docker swarm management
+        icon: portainer
+    - Dozzle:
+        href: http://dozzle.regularlab.xyz
+        description: Docker log viewer
+        icon: dozzle
+    - Traefik:
+        href: http://traefik.regularlab.xyz
+        description: Reverse proxy dashboard
+        icon: traefik
+
+- Media:
+    - Jellyfin:
+        href: http://jellytest.regularlab.xyz
+        description: Media server
+        icon: jellyfin
+    - PiGallery:
+        href: http://pigallery.regularlab.xyz
+        description: Photo gallery
+        icon: pigallery2

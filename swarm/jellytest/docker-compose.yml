@@ -30,13 +30,13 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/jellytest/config"
+      device: ":/volume1/appdata/jellytest/config"
   jellytest_cache:
     driver: local
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/jellytest/cache"
+      device: ":/volume1/appdata/jellytest/cache"
   jellytest_media:
     driver: local
     driver_opts:

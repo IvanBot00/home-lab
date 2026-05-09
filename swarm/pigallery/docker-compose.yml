@@ -31,13 +31,13 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/pigallery/config"
+      device: ":/volume1/appdata/pigallery/config"
   pigallery_db:
     driver: local
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/pigallery/db"
+      device: ":/volume1/appdata/pigallery/db"
   pigallery_media:
     driver: local
     driver_opts:

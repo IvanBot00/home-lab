@@ -31,11 +31,6 @@ services:
         - "traefik.http.routers.portainer.rule=Host(`portainer.regularlab.xyz`)"
         - "traefik.http.routers.portainer.entrypoints=web"
         - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-        - "homepage.name=Portainer"
-        - "homepage.href=http://portainer.regularlab.xyz"
-        - "homepage.group=Admin"
-        - "homepage.description=Docker swarm management"
-        - "homepage.icon=portainer"
 
 networks:
   agent_network:

@@ -21,3 +21,11 @@
         href: http://pigallery.regularlab.xyz
         description: Photo gallery
         icon: pigallery2
+    - Kavita:
+        href: https://kavita.regularlab.xyz
+        description: Manga & comic reader
+        icon: kavita
+    - Filestash:
+        href: https://filestash.regularlab.xyz
+        description: File manager
+        icon: filestash

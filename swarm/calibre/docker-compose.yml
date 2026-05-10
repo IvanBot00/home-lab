@@ -4,9 +4,9 @@ services:
     security_opt:
       - seccomp:unconfined
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Chicago
+      - PUID=1028
+      - PGID=100
+      - TZ=America/Los_Angeles
     volumes:
       - calibre_config:/config
     networks:

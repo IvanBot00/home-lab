@@ -1,0 +1,44 @@
+services:
+  kavita:
+    image: lscr.io/linuxserver/kavita:latest
+    environment:
+      - PUID=1028
+      - PGID=100
+      - TZ=America/Los_Angeles
+    volumes:
+      - kavita_config:/config
+      - kavita_data:/data
+    networks:
+      - traefik-proxy
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.nas == synology-nas
+      restart_policy:
+        condition: any
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.kavita.rule=Host(`kavita.regularlab.xyz`)"
+        - "traefik.http.routers.kavita.entrypoints=websecure"
+        - "traefik.http.routers.kavita.tls=true"
+        - "traefik.http.routers.kavita.tls.certresolver=letsencrypt"
+        - "traefik.http.services.kavita.loadbalancer.server.port=5000"
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  kavita_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/appdata/kavita/config"
+  kavita_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/data/media/books"

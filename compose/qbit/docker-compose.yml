@@ -1,0 +1,48 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "8080:8080"   # qBittorrent Web UI (exposed via gluetun's network)
+      - "6881:6881"   # qBittorrent torrent port (TCP)
+      - "6881:6881/udp"
+    env_file:
+      - .env
+    environment:
+      VPN_SERVICE_PROVIDER: protonvpn
+      VPN_TYPE: wireguard
+      SERVER_COUNTRIES: ${VPN_SERVER_COUNTRIES:-Netherlands}
+      # Kill switch — block all non-VPN traffic if the tunnel drops.
+      FIREWALL: "on"
+      FIREWALL_OUTBOUND_SUBNETS: ""
+    volumes:
+      - ${GLUETUN_DATA_DIR:-/appdata/gluetun}:/gluetun
+    networks:
+      - vpn
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    # on-failure so Docker restarts qbit if gluetun's network namespace
+    # disappears (VPN crash), rather than leaving it running with no route.
+    restart: on-failure
+    network_mode: "service:gluetun"
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-UTC}
+      WEBUI_PORT: 8080
+    volumes:
+      - ${QBITTORRENT_CONFIG_DIR:-/appdata/qbittorrent/config}:/config
+      - ${DOWNLOADS_DIR:-/mnt/downloads}:/downloads
+
+networks:
+  vpn:
+    driver: bridge
+    internal: false

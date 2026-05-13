@@ -1,0 +1,15 @@
+[Unit]
+Description=Actual Budget
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=ghcr.io/actualbudget/actual-server:latest
+PublishPort=100.71.172.113:5006:5006
+Volume=/mnt/appdata/actual:/data
+
+[Service]
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

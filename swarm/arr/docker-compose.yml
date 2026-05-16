@@ -1,0 +1,74 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    environment:
+      - PUID=1026
+      - PGID=100
+      - TZ=America/Los_Angeles
+    volumes:
+      - sonarr_config:/config
+      - sonarr_shows:/tv
+      - sonarr_torrents:/downloads
+    networks:
+      - traefik-proxy
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.sonarr.rule=Host(`sonarr.regularlab.xyz`)"
+        - "traefik.http.routers.sonarr.entrypoints=websecure"
+        - "traefik.http.routers.sonarr.tls.certresolver=letsencrypt"
+        - "traefik.http.services.sonarr.loadbalancer.server.port=8989"
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      - PUID=1026
+      - PGID=100
+      - TZ=America/Los_Angeles
+    volumes:
+      - prowlarr_config:/config
+    networks:
+      - traefik-proxy
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.prowlarr.rule=Host(`prowlarr.regularlab.xyz`)"
+        - "traefik.http.routers.prowlarr.entrypoints=websecure"
+        - "traefik.http.routers.prowlarr.tls.certresolver=letsencrypt"
+        - "traefik.http.services.prowlarr.loadbalancer.server.port=9696"
+
+networks:
+  traefik-proxy:
+    external: true
+
+volumes:
+  sonarr_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/appdata/sonarr"
+  sonarr_shows:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/data/media/shows"
+  sonarr_torrents:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/data/torrents"
+  prowlarr_config:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
+      device: ":/volume1/appdata/prowlarr"

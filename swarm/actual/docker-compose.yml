@@ -34,4 +34,4 @@ volumes:
     driver_opts:
       type: nfs
       o: addr=10.10.10.3,rw,nfsvers=4,hard,intr
-      device: ":/volume2/appdata/actual"
+      device: ":/volume1/appdata/actual"
